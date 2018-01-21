@@ -6,9 +6,10 @@
 	var keys = require("./keys.js");
 	// console.log("keys", keys);
 
-	
+	// var twitter = require ("twitter");
 	var twitter = require("twitter");
 	// var spotify = require ("spotify");
+	var spotify = require("spotify");
 	var liriArgument = process.argv[2];
 		var client = new twitter({
 			consumer_key: '3oNJke6X0Nl1ogR5jpP7Aqs92',
@@ -46,3 +47,55 @@
 	    }
 	  });
 	}
+	function spotifyMe(){
+	console.log("Music for DAYS!");
+
+	//variable for search term, test if defined.
+
+	var searchTrack;
+	if(secondCommand === undefined){
+		searchTrack = "What's My Age Again?";
+	}else{
+		searchTrack = secondCommand;
+	}
+	//launch spotify search
+	spotify.search({type:'track', query:searchTrack}, function(err,data){
+	    if(err){
+	        console.log('Error occurred: ' + err);
+	        return;
+	    }else{
+	        //tried searching for release year! Spotify doesn't return this!
+	  		console.log("Artist: " + data.tracks.items[0].artists[0].name);
+	        console.log("Song: " + data.tracks.items[0].name);
+	        console.log("Album: " + data.tracks.items[0].album.name);
+	        console.log("Preview Here: " + data.tracks.items[0].preview_url);
+	    }
+	});
+};//end spotifyMe
+
+function aMovieForMe(){
+	console.log("Netflix and Chill?");
+
+	//same as above, test if search term entered
+	var searchMovie;
+	if(secondCommand === undefined){
+		searchMovie = "Mr. Nobody";
+	}else{
+		searchMovie = secondCommand;
+	};
+
+	var url = 'http://www.omdbapi.com/?t=' + searchMovie +'&y=&plot=long&tomatoes=true&r=json';
+   	request(url, function(error, response, body){
+	    if(!error && response.statusCode == 200){
+	        console.log("Title: " + JSON.parse(body)["Title"]);
+	        console.log("Year: " + JSON.parse(body)["Year"]);
+	        console.log("IMDB Rating: " + JSON.parse(body)["imdbRating"]);
+	        console.log("Country: " + JSON.parse(body)["Country"]);
+	        console.log("Language: " + JSON.parse(body)["Language"]);
+	        console.log("Plot: " + JSON.parse(body)["Plot"]);
+	        console.log("Actors: " + JSON.parse(body)["Actors"]);
+	        console.log("Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"]);
+	        console.log("Rotten Tomatoes URL: " + JSON.parse(body)["tomatoURL"]);
+	    }
+    });
+};//end aMovieForMe
